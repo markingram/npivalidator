@@ -13,12 +13,12 @@ namespace npivalidator
         {
             try
             {
-                IConfiguration config = new ConfigurationBuilder()
+                IConfiguration secrets = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json")
                     .Build();
                 
-                string token = config["access_token"];
+                string token = secrets["access_token"];
 
                 string fileContent = readFirstLineOfFile("npis.csv");
                 IEnumerable<int> npis = StringToIntList(fileContent);
