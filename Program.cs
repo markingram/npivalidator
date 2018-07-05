@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace npivalidator
 {
     class Program
-    {
-        private const string token = "3932f3b0-cfab-11dc-95ff-0800200c9a663932f3b0-cfab-11dc-95ff-0800200c9a66";
-        
+    {   
         static void Main(string[] args)
         {
             try
             {
+                IConfiguration config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                
+                string token = config["access_token"];
+
                 string fileContent = readFirstLineOfFile("npis.csv");
                 IEnumerable<int> npis = StringToIntList(fileContent);
                 Console.WriteLine($"{npis.Count()} NPIs read");
@@ -28,9 +34,9 @@ namespace npivalidator
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Console.WriteLine("Something went wrong...");
+                Console.WriteLine(e);
             }
         }
 
